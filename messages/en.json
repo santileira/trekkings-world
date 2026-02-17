@@ -1,0 +1,58 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "About Us",
+    "trekkings": "Trekkings",
+    "regions": "Regions",
+    "search": "Search",
+    "language": "Language",
+    "country": "Country",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "home": {
+    "title": "Trekkings of the World",
+    "subtitle": "Discover the best trekking routes",
+    "featuredTreks": "Featured Treks",
+    "exploreByCountry": "Explore by Country",
+    "viewAll": "View All"
+  },
+  "country": {
+    "argentina": "Argentina",
+    "chile": "Chile",
+    "usa": "United States",
+    "trekkingsIn": "Trekkings in {country}",
+    "exploreRegions": "Explore Regions"
+  },
+  "trek": {
+    "difficulty": "Difficulty",
+    "duration": "Duration",
+    "distance": "Distance",
+    "elevation": "Elevation",
+    "bestSeason": "Best Season",
+    "tips": "Tips",
+    "gallery": "Gallery",
+    "map": "Map",
+    "comments": "Comments",
+    "easy": "Easy",
+    "moderate": "Moderate",
+    "hard": "Hard",
+    "expert": "Expert"
+  },
+  "filters": {
+    "title": "Filters",
+    "difficulty": "Difficulty",
+    "duration": "Duration",
+    "region": "Region",
+    "all": "All",
+    "clear": "Clear Filters",
+    "day1": "1 day",
+    "days2_3": "2-3 days",
+    "days4_7": "4-7 days",
+    "daysMore": "+7 days"
+  },
+  "footer": {
+    "madeWith": "Made with",
+    "forAdventurers": "for adventurers"
+  }
+}
