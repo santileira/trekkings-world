@@ -1,0 +1,120 @@
+{
+  "countries": [
+    {
+      "_id": "country-mexico",
+      "_type": "country",
+      "name": { "es": "México", "en": "Mexico" },
+      "code": "mx",
+      "slug": "mexico",
+      "flag": "🇲🇽",
+      "enabled": true
+    },
+    {
+      "_id": "country-peru",
+      "_type": "country",
+      "name": { "es": "Perú", "en": "Peru" },
+      "code": "pe",
+      "slug": "peru",
+      "flag": "🇵🇪",
+      "enabled": true
+    },
+    {
+      "_id": "country-colombia",
+      "_type": "country",
+      "name": { "es": "Colombia", "en": "Colombia" },
+      "code": "co",
+      "slug": "colombia",
+      "flag": "🇨🇴",
+      "enabled": true
+    },
+    {
+      "_id": "country-ecuador",
+      "_type": "country",
+      "name": { "es": "Ecuador", "en": "Ecuador" },
+      "code": "ec",
+      "slug": "ecuador",
+      "flag": "🇪🇨",
+      "enabled": true
+    },
+    {
+      "_id": "country-bolivia",
+      "_type": "country",
+      "name": { "es": "Bolivia", "en": "Bolivia" },
+      "code": "bo",
+      "slug": "bolivia",
+      "flag": "🇧🇴",
+      "enabled": true
+    },
+    {
+      "_id": "country-costa-rica",
+      "_type": "country",
+      "name": { "es": "Costa Rica", "en": "Costa Rica" },
+      "code": "cr",
+      "slug": "costa-rica",
+      "flag": "🇨🇷",
+      "enabled": true
+    },
+    {
+      "_id": "country-brazil",
+      "_type": "country",
+      "name": { "es": "Brasil", "en": "Brazil" },
+      "code": "br",
+      "slug": "brazil",
+      "flag": "🇧🇷",
+      "enabled": true
+    }
+  ],
+  "regions": {
+    "mexico": [
+      { "_id": "region-mx-estado-mexico", "name": { "es": "Estado de México", "en": "State of Mexico" }, "slug": "estado-mexico" },
+      { "_id": "region-mx-veracruz", "name": { "es": "Veracruz", "en": "Veracruz" }, "slug": "veracruz" },
+      { "_id": "region-mx-chihuahua", "name": { "es": "Chihuahua", "en": "Chihuahua" }, "slug": "chihuahua" },
+      { "_id": "region-mx-chiapas", "name": { "es": "Chiapas", "en": "Chiapas" }, "slug": "chiapas" },
+      { "_id": "region-mx-tlaxcala", "name": { "es": "Tlaxcala", "en": "Tlaxcala" }, "slug": "tlaxcala" },
+      { "_id": "region-mx-quintana-roo", "name": { "es": "Quintana Roo", "en": "Quintana Roo" }, "slug": "quintana-roo" },
+      { "_id": "region-mx-san-luis-potosi", "name": { "es": "San Luis Potosí", "en": "San Luis Potosí" }, "slug": "san-luis-potosi" },
+      { "_id": "region-mx-michoacan", "name": { "es": "Michoacán", "en": "Michoacán" }, "slug": "michoacan" }
+    ],
+    "peru": [
+      { "_id": "region-pe-cusco", "name": { "es": "Cusco", "en": "Cusco" }, "slug": "cusco" },
+      { "_id": "region-pe-arequipa", "name": { "es": "Arequipa", "en": "Arequipa" }, "slug": "arequipa" },
+      { "_id": "region-pe-ancash", "name": { "es": "Áncash", "en": "Ancash" }, "slug": "ancash" }
+    ],
+    "colombia": [
+      { "_id": "region-co-magdalena", "name": { "es": "Magdalena", "en": "Magdalena" }, "slug": "magdalena" },
+      { "_id": "region-co-boyaca", "name": { "es": "Boyacá", "en": "Boyacá" }, "slug": "boyaca" },
+      { "_id": "region-co-quindio", "name": { "es": "Quindío", "en": "Quindío" }, "slug": "quindio" },
+      { "_id": "region-co-risaralda", "name": { "es": "Risaralda", "en": "Risaralda" }, "slug": "risaralda" },
+      { "_id": "region-co-santander", "name": { "es": "Santander", "en": "Santander" }, "slug": "santander" },
+      { "_id": "region-co-cauca", "name": { "es": "Cauca", "en": "Cauca" }, "slug": "cauca" },
+      { "_id": "region-co-cundinamarca", "name": { "es": "Cundinamarca", "en": "Cundinamarca" }, "slug": "cundinamarca" }
+    ],
+    "ecuador": [
+      { "_id": "region-ec-pichincha", "name": { "es": "Pichincha", "en": "Pichincha" }, "slug": "pichincha" },
+      { "_id": "region-ec-cotopaxi", "name": { "es": "Cotopaxi", "en": "Cotopaxi" }, "slug": "cotopaxi" },
+      { "_id": "region-ec-chimborazo", "name": { "es": "Chimborazo", "en": "Chimborazo" }, "slug": "chimborazo" },
+      { "_id": "region-ec-tungurahua", "name": { "es": "Tungurahua", "en": "Tungurahua" }, "slug": "tungurahua" },
+      { "_id": "region-ec-imbabura", "name": { "es": "Imbabura", "en": "Imbabura" }, "slug": "imbabura" }
+    ],
+    "bolivia": [
+      { "_id": "region-bo-la-paz", "name": { "es": "La Paz", "en": "La Paz" }, "slug": "la-paz" },
+      { "_id": "region-bo-potosi", "name": { "es": "Potosí", "en": "Potosí" }, "slug": "potosi" },
+      { "_id": "region-bo-cochabamba", "name": { "es": "Cochabamba", "en": "Cochabamba" }, "slug": "cochabamba" }
+    ],
+    "costa-rica": [
+      { "_id": "region-cr-cartago", "name": { "es": "Cartago", "en": "Cartago" }, "slug": "cartago" },
+      { "_id": "region-cr-alajuela", "name": { "es": "Alajuela", "en": "Alajuela" }, "slug": "alajuela" },
+      { "_id": "region-cr-puntarenas", "name": { "es": "Puntarenas", "en": "Puntarenas" }, "slug": "puntarenas" },
+      { "_id": "region-cr-guanacaste", "name": { "es": "Guanacaste", "en": "Guanacaste" }, "slug": "guanacaste" }
+    ],
+    "brazil": [
+      { "_id": "region-br-bahia", "name": { "es": "Bahía", "en": "Bahia" }, "slug": "bahia" },
+      { "_id": "region-br-rio-de-janeiro", "name": { "es": "Río de Janeiro", "en": "Rio de Janeiro" }, "slug": "rio-de-janeiro" },
+      { "_id": "region-br-amazonas", "name": { "es": "Amazonas", "en": "Amazonas" }, "slug": "amazonas" },
+      { "_id": "region-br-goias", "name": { "es": "Goiás", "en": "Goiás" }, "slug": "goias" },
+      { "_id": "region-br-minas-gerais", "name": { "es": "Minas Gerais", "en": "Minas Gerais" }, "slug": "minas-gerais" },
+      { "_id": "region-br-maranhao", "name": { "es": "Maranhão", "en": "Maranhão" }, "slug": "maranhao" },
+      { "_id": "region-br-roraima", "name": { "es": "Roraima", "en": "Roraima" }, "slug": "roraima" }
+    ]
+  }
+}
