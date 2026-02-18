@@ -10,14 +10,7 @@ export default function FeedbackButton({ locale }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   const email = 'santiagoleira10@gmail.com';
-  const subject = locale === 'es'
-    ? 'Feedback - Trekkings World'
-    : 'Feedback - Trekkings World';
-  const body = locale === 'es'
-    ? 'Hola! Quería compartir mi feedback sobre Trekkings World:\n\n'
-    : 'Hi! I wanted to share my feedback about Trekkings World:\n\n';
-
-  const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const mailtoLink = `mailto:${email}`;
 
   const label = locale === 'es' ? 'Sugerencias' : 'Feedback';
 
