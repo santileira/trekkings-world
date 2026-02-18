@@ -6,6 +6,8 @@ import PhotoGallery from '@/components/PhotoGallery';
 import AdBanner from '@/components/AdBanner';
 import ExternalLinks from '@/components/ExternalLinks';
 import SocialLinks from '@/components/SocialLinks';
+import WeatherWidget from '@/components/WeatherWidget';
+import TrekkingApps from '@/components/TrekkingApps';
 import { client, urlForImage } from '@/lib/sanity';
 import { trekQuery } from '@/lib/queries';
 import Image from 'next/image';
@@ -350,6 +352,11 @@ export default async function TrekDetailPage({ params }: Props) {
               </dl>
             </div>
 
+            {/* Current Weather */}
+            {trek.coordinates && (
+              <WeatherWidget coordinates={trek.coordinates} locale={locale} />
+            )}
+
             {/* Essential Info - Important to Know */}
             {essentialInfo && essentialInfo.length > 0 && (
               <div className="bg-red-50 rounded-xl border border-red-200 p-4 sm:p-5">
@@ -364,6 +371,9 @@ export default async function TrekDetailPage({ params }: Props) {
                 </div>
               </div>
             )}
+
+            {/* Trekking Apps */}
+            <TrekkingApps locale={locale} trekName={title} coordinates={trek.coordinates} />
 
             {/* Ad Banner - hidden on mobile, show on desktop */}
             <AdBanner position="sidebar" slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR} />

@@ -12,6 +12,7 @@
     "@sanity/icons": "^3.7.4",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.22.0",
+    "dotenv": "^17.3.1",
     "eventsource": "^4.1.0",
     "leaflet": "^1.9.4",
     "next": "16.1.6",

@@ -8,6 +8,12 @@
  * 4. Run: npx ts-node scripts/fetch-trek-images.ts
  */
 
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+// Load environment variables from .env.local
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+
 import { createClient } from '@sanity/client';
 
 const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
