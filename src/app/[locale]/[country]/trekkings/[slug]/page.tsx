@@ -2,7 +2,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { PortableText } from '@portabletext/react';
 import TrekMap from '@/components/TrekMap';
-import PhotoGallery from '@/components/PhotoGallery';
+import ImageCarousel from '@/components/ImageCarousel';
 import AdBanner from '@/components/AdBanner';
 import ExternalLinks from '@/components/ExternalLinks';
 import SocialLinks from '@/components/SocialLinks';
@@ -10,7 +10,6 @@ import WeatherWidget from '@/components/WeatherWidget';
 import TrekkingApps from '@/components/TrekkingApps';
 import { client, urlForImage } from '@/lib/sanity';
 import { trekQuery } from '@/lib/queries';
-import Image from 'next/image';
 
 type Trek = {
   _id: string;
@@ -170,9 +169,12 @@ export default async function TrekDetailPage({ params }: Props) {
 
   const tipsList = extractTips(tips);
 
-  // Get image URLs from Sanity
+  // Get image URLs from Sanity - combine mainImage + gallery for carousel
   const mainImageUrl = trek.mainImage ? urlForImage(trek.mainImage).width(1200).height(600).url() : null;
-  const galleryUrls = trek.gallery?.map((img: any) => urlForImage(img).width(800).height(600).url()) || [];
+  const galleryUrls = trek.gallery?.map((img: any) => urlForImage(img).width(1200).height(600).url()) || [];
+
+  // Combine all images for the hero carousel
+  const allImages = mainImageUrl ? [mainImageUrl, ...galleryUrls] : galleryUrls;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -236,23 +238,9 @@ export default async function TrekDetailPage({ params }: Props) {
             </div>
           </header>
 
-          {/* Hero Image */}
-          <div className="relative h-64 md:h-96 bg-slate-100 rounded-xl mb-8 overflow-hidden">
-            {mainImageUrl ? (
-              <Image
-                src={mainImageUrl}
-                alt={title}
-                fill
-                className="object-cover"
-                priority
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <svg className="w-24 h-24 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-            )}
+          {/* Hero Image Carousel */}
+          <div className="mb-8">
+            <ImageCarousel images={allImages} alt={title} />
           </div>
 
           {/* Description */}
@@ -281,15 +269,6 @@ export default async function TrekDetailPage({ params }: Props) {
             </section>
           )}
 
-          {/* Photo Gallery */}
-          {galleryUrls.length > 0 && (
-            <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                {locale === 'es' ? 'Galería' : 'Gallery'}
-              </h2>
-              <PhotoGallery images={galleryUrls} />
-            </section>
-          )}
 
           {/* Tips */}
           {tipsList.length > 0 && (
