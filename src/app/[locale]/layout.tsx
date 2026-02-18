@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Sidebar from '@/components/Sidebar';
 import CookieConsent from '@/components/CookieConsent';
+import FeedbackButton from '@/components/FeedbackButton';
 import Analytics from '@/components/Analytics';
 
 type Props = {
@@ -139,6 +140,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           </div>
 
           <CookieConsent locale={locale} />
+          <FeedbackButton locale={locale} />
         </NextIntlClientProvider>
       </body>
     </html>
