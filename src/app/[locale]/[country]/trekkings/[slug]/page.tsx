@@ -277,15 +277,16 @@ export default async function TrekDetailPage({ params }: Props) {
                       }
                     </p>
                     <a
-                      href={`https://www.google.com/maps/dir/?api=1&destination=${trek.coordinates.lat},${trek.coordinates.lng}`}
+                      href={`https://www.google.com/maps?q=${trek.coordinates.lat},${trek.coordinates.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition-colors"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
-                      {locale === 'es' ? 'Cómo llegar en Google Maps' : 'Get directions on Google Maps'}
+                      {locale === 'es' ? 'Ver en Google Maps' : 'View on Google Maps'}
                     </a>
                   </div>
                 </div>
