@@ -10,6 +10,7 @@ export const countriesQuery = groq`
     description,
     flag,
     image,
+    enabled,
     "trekCount": count(*[_type == "trek" && references(^._id)])
   }
 `;
