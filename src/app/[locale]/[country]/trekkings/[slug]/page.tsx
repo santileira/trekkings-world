@@ -7,9 +7,10 @@ import AdBanner from '@/components/AdBanner';
 import ExternalLinks from '@/components/ExternalLinks';
 import SocialLinks from '@/components/SocialLinks';
 import WeatherWidget from '@/components/WeatherWidget';
-import TrekkingApps from '@/components/TrekkingApps';
+import RelatedTreks from '@/components/RelatedTreks';
 import { client, urlForImage } from '@/lib/sanity';
-import { trekQuery } from '@/lib/queries';
+import { trekQuery, relatedTreksQuery } from '@/lib/queries';
+import { sortByProximity } from '@/lib/geo';
 
 type Trek = {
   _id: string;
@@ -62,6 +63,23 @@ async function getTrek(slug: string): Promise<Trek | null> {
   return client.fetch(trekQuery, { slug });
 }
 
+type RelatedTrek = {
+  _id: string;
+  title: { es: string; en: string };
+  slug: string;
+  country: string;
+  region: string;
+  difficulty: string;
+  duration: string;
+  distance: number;
+  mainImage: string;
+  coordinates?: { lat: number; lng: number };
+};
+
+async function getRelatedTreks(countrySlug: string, currentSlug: string): Promise<RelatedTrek[]> {
+  return client.fetch(relatedTreksQuery, { countrySlug, currentSlug });
+}
+
 export default async function TrekDetailPage({ params }: Props) {
   const { locale, country, slug } = await params;
   setRequestLocale(locale);
@@ -71,6 +89,12 @@ export default async function TrekDetailPage({ params }: Props) {
   if (!trek || trek.country.slug !== country) {
     notFound();
   }
+
+  // Fetch related treks and sort by proximity
+  const relatedTreksCandidates = await getRelatedTreks(country, slug);
+  const relatedTreks = trek.coordinates
+    ? sortByProximity(relatedTreksCandidates, trek.coordinates.lat, trek.coordinates.lng, 3)
+    : [];
 
   const title = locale === 'es' ? trek.title.es : trek.title.en;
   const description = locale === 'es' ? trek.description?.es : trek.description?.en;
@@ -340,6 +364,9 @@ export default async function TrekDetailPage({ params }: Props) {
             </section>
           )}
 
+          {/* Related Treks */}
+          <RelatedTreks treks={relatedTreks} locale={locale} />
+
         </div>
 
         {/* Sidebar */}
@@ -389,9 +416,6 @@ export default async function TrekDetailPage({ params }: Props) {
                 </div>
               </div>
             )}
-
-            {/* Trekking Apps */}
-            <TrekkingApps locale={locale} trekName={title} coordinates={trek.coordinates} />
 
             {/* Ad Banner - hidden on mobile, show on desktop */}
             <AdBanner position="sidebar" slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR} />

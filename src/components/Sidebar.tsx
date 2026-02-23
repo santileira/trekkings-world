@@ -164,6 +164,59 @@ export default function Sidebar({ locale, className = '', onLinkClick }: Sidebar
             </div>
           )}
         </nav>
+
+        {/* Resources Section */}
+        <div className="mt-6 pt-6 border-t border-gray-200">
+          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+            {locale === 'es' ? 'Recursos' : 'Resources'}
+          </h2>
+          <div className="space-y-2">
+            <Link
+              href="/tips"
+              onClick={onLinkClick}
+              className={`flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                pathname === '/tips'
+                  ? 'bg-slate-100 text-slate-900'
+                  : 'text-gray-700 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <span className="text-lg">🎒</span>
+                <span>{locale === 'es' ? 'Recomendaciones' : 'Recommendations'}</span>
+              </span>
+              <svg
+                className="w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+            <Link
+              href="/apps"
+              onClick={onLinkClick}
+              className={`flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                pathname === '/apps'
+                  ? 'bg-slate-100 text-slate-900'
+                  : 'text-gray-700 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <span className="text-lg">📱</span>
+                <span>{locale === 'es' ? 'Apps de trekking' : 'Trekking apps'}</span>
+              </span>
+              <svg
+                className="w-4 h-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </div>
       </div>
     </aside>
   );

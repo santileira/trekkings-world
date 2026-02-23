@@ -154,3 +154,19 @@ export const searchTreksQuery = groq`
     mainImage
   }
 `;
+
+// Get related treks by country (for proximity calculation)
+export const relatedTreksQuery = groq`
+  *[_type == "trek" && country->slug.current == $countrySlug && slug.current != $currentSlug] {
+    _id,
+    title,
+    "slug": slug.current,
+    "country": country->slug.current,
+    "region": region->slug.current,
+    difficulty,
+    duration,
+    distance,
+    mainImage,
+    coordinates
+  }
+`;
