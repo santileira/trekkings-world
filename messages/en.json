@@ -49,7 +49,10 @@
     "day1": "1 day",
     "days2_3": "2-3 days",
     "days4_7": "4-7 days",
-    "daysMore": "+7 days"
+    "daysMore": "+7 days",
+    "refugio": "Shelter",
+    "withRefugio": "With shelter",
+    "withoutRefugio": "Without shelter"
   },
   "footer": {
     "madeWith": "Made with",

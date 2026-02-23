@@ -14,6 +14,7 @@ type Trek = {
   difficulty: string;
   duration: string;
   distance: number;
+  hasRefugio?: boolean;
   mainImage: any;
 };
 
@@ -26,7 +27,7 @@ type Country = {
 
 type Props = {
   params: Promise<{ locale: string; country: string }>;
-  searchParams: Promise<{ difficulty?: string; duration?: string; region?: string }>;
+  searchParams: Promise<{ difficulty?: string; duration?: string; region?: string; refugio?: string }>;
 };
 
 // Difficulty order for sorting (easy to hard)
@@ -111,6 +112,12 @@ export default async function TrekkingsPage({ params, searchParams }: Props) {
 
   if (filters.region) {
     filteredTreks = filteredTreks.filter((trek) => trek.region === filters.region);
+  }
+
+  if (filters.refugio) {
+    filteredTreks = filteredTreks.filter((trek) =>
+      filters.refugio === 'yes' ? trek.hasRefugio === true : trek.hasRefugio !== true
+    );
   }
 
   // Sort by difficulty (easy to hard)

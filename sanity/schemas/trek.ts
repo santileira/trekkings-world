@@ -259,6 +259,13 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'hasRefugio',
+      title: 'Has Refugio',
+      type: 'boolean',
+      description: 'Trek has a mountain refuge/shelter along the route',
+      initialValue: false,
+    }),
+    defineField({
       name: 'featured',
       title: 'Featured',
       type: 'boolean',

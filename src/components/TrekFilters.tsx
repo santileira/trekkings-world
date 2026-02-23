@@ -6,7 +6,7 @@ import { useCallback } from 'react';
 
 type Props = {
   locale: string;
-  currentFilters: { difficulty?: string; duration?: string; region?: string };
+  currentFilters: { difficulty?: string; duration?: string; region?: string; refugio?: string };
   country: string;
 };
 
@@ -29,6 +29,9 @@ export default function TrekFilters({ locale, currentFilters, country }: Props) 
       }
       if (currentFilters.region && key !== 'region') {
         params.set('region', currentFilters.region);
+      }
+      if (currentFilters.refugio && key !== 'refugio') {
+        params.set('refugio', currentFilters.refugio);
       }
 
       // Set new filter
@@ -60,7 +63,12 @@ export default function TrekFilters({ locale, currentFilters, country }: Props) 
     { value: '7+days', label: t('daysMore') },
   ];
 
-  const hasFilters = currentFilters.difficulty || currentFilters.duration || currentFilters.region;
+  const refugioOptions = [
+    { value: 'yes', label: t('withRefugio') },
+    { value: 'no', label: t('withoutRefugio') },
+  ];
+
+  const hasFilters = currentFilters.difficulty || currentFilters.duration || currentFilters.region || currentFilters.refugio;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
@@ -123,6 +131,31 @@ export default function TrekFilters({ locale, currentFilters, country }: Props) 
                 }`}
               >
                 {dur.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Refugio */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <span className="text-sm text-gray-500">{t('refugio')}:</span>
+          <div className="flex flex-wrap gap-2">
+            {refugioOptions.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() =>
+                  updateFilter(
+                    'refugio',
+                    currentFilters.refugio === opt.value ? null : opt.value
+                  )
+                }
+                className={`px-3 py-1.5 sm:py-1 text-sm rounded-full transition-colors ${
+                  currentFilters.refugio === opt.value
+                    ? 'bg-slate-800 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {opt.label}
               </button>
             ))}
           </div>

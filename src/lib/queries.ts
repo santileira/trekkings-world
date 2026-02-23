@@ -53,6 +53,7 @@ export const treksQuery = groq`
     duration,
     distance,
     elevation,
+    hasRefugio,
     mainImage
   }
 `;
