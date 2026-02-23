@@ -9,14 +9,15 @@ type Props = {
 export default function FeedbackButton({ locale }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const email = 'santiagoleira10@gmail.com';
-  const mailtoLink = `mailto:${email}`;
+  const whatsappLink = 'https://wa.me/5491135921400';
 
   const label = locale === 'es' ? 'Sugerencias' : 'Feedback';
 
   return (
     <a
-      href={mailtoLink}
+      href={whatsappLink}
+      target="_blank"
+      rel="noopener noreferrer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-slate-700 hover:bg-slate-800 text-white px-4 py-3 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl"
