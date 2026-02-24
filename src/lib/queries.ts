@@ -141,7 +141,7 @@ export const countriesWithRegionsQuery = groq`
 
 // Search treks by title
 export const searchTreksQuery = groq`
-  *[_type == "trek" && (title.es match $searchTerm || title.en match $searchTerm)] | order(publishedAt desc)[0...10] {
+  *[_type == "trek" && (lower(title.es) match lower($searchTerm) || lower(title.en) match lower($searchTerm))] | order(publishedAt desc)[0...10] {
     _id,
     title,
     "slug": slug.current,
