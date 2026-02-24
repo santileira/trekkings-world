@@ -139,9 +139,9 @@ export const countriesWithRegionsQuery = groq`
   }
 `;
 
-// Search treks by title
+// Search treks - fetch all for client-side accent-insensitive filtering
 export const searchTreksQuery = groq`
-  *[_type == "trek" && (lower(title.es) match lower($searchTerm) || lower(title.en) match lower($searchTerm))] | order(publishedAt desc)[0...10] {
+  *[_type == "trek"] | order(publishedAt desc) {
     _id,
     title,
     "slug": slug.current,
