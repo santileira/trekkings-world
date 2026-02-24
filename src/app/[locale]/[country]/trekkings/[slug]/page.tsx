@@ -50,6 +50,7 @@ type Trek = {
     website?: string;
     instagram?: string;
     facebook?: string;
+    whatsapp?: string;
     youtube?: string;
     twitter?: string;
   };

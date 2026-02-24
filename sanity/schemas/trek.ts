@@ -251,6 +251,12 @@ export default defineType({
           description: 'YouTube channel URL',
         },
         {
+          name: 'whatsapp',
+          title: 'WhatsApp',
+          type: 'url',
+          description: 'WhatsApp link (e.g., https://wa.link/...)',
+        },
+        {
           name: 'twitter',
           title: 'Twitter/X',
           type: 'url',
