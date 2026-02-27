@@ -65,7 +65,7 @@ export default async function PrivacyPage({ params }: Props) {
 
             <h2 className="text-xl font-semibold text-slate-800 mt-8 mb-4">5. Contacto</h2>
             <p className="text-slate-600 mb-4">
-              Para consultas sobre privacidad, contactanos en: privacy@trekkingsworld.com
+              Para consultas sobre privacidad, contactanos en: santiagoleira10@gmail.com o al teléfono +5491135219400
             </p>
           </>
         ) : (
@@ -116,7 +116,7 @@ export default async function PrivacyPage({ params }: Props) {
 
             <h2 className="text-xl font-semibold text-slate-800 mt-8 mb-4">5. Contact</h2>
             <p className="text-slate-600 mb-4">
-              For privacy inquiries, contact us at: privacy@trekkingsworld.com
+              For privacy inquiries, contact us at: santiagoleira10@gmail.com or by phone at +5491135219400
             </p>
           </>
         )}

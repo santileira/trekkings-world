@@ -9,7 +9,7 @@ type Props = {
 export default function FeedbackButton({ locale }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const whatsappLink = 'https://wa.me/5491135921400';
+  const whatsappLink = 'https://wa.me/5491135219400';
 
   const label = locale === 'es' ? 'Sugerencias' : 'Feedback';
 
