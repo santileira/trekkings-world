@@ -67,16 +67,16 @@ export default async function HomePage({ params }: Props) {
     <div>
       {/* Hero Section */}
       <section className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-800">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-slate-800">
               {t('title')}
             </h1>
-            <p className="mt-6 text-xl text-slate-600">
+            <p className="mt-4 text-lg text-slate-600">
               {t('subtitle')}
             </p>
             {firstEnabledCountry && (
-              <div className="mt-10 flex flex-wrap gap-4">
+              <div className="mt-6 flex flex-wrap gap-4">
                 <Link
                   href={`/${firstEnabledCountry.code}/trekkings`}
                   className="inline-flex items-center px-6 py-3 bg-slate-800 text-white font-semibold rounded-lg hover:bg-slate-700 transition-colors"
