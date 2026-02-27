@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Metadata } from 'next';
 import { Link } from '@/i18n/navigation';
 import { notFound } from 'next/navigation';
 
@@ -19,6 +20,61 @@ const countryData: Record<string, { name: { es: string; en: string }; flag: stri
 type Props = {
   params: Promise<{ locale: string; country: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, country } = await params;
+  const data = countryData[country];
+
+  if (!data) {
+    return {};
+  }
+
+  const isSpanish = locale === 'es';
+  const countryName = isSpanish ? data.name.es : data.name.en;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://trekkings-world.vercel.app';
+
+  const title = isSpanish
+    ? `Trekkings en ${countryName} - Gu\u00edas y Rutas`
+    : `Treks in ${countryName} - Guides and Routes`;
+
+  const description = isSpanish
+    ? `Explor\u00e1 las mejores rutas de trekking en ${countryName}. Gu\u00edas detalladas por regi\u00f3n con mapas, dificultad, distancia y consejos para cada sendero.`
+    : `Explore the best trekking routes in ${countryName}. Detailed guides by region with maps, difficulty, distance and tips for every trail.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/${country}`,
+      languages: {
+        'es': `${siteUrl}/es/${country}`,
+        'en': `${siteUrl}/en/${country}`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${locale}/${country}`,
+      siteName: 'Trekkings World',
+      locale: isSpanish ? 'es_AR' : 'en_US',
+      type: 'website',
+      images: [
+        {
+          url: `${siteUrl}/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `Trekkings in ${countryName}`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${siteUrl}/og-image.jpg`],
+    },
+  };
+}
 
 export default async function CountryPage({ params }: Props) {
   const { locale, country } = await params;

@@ -1,4 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
+import { Metadata } from 'next';
 import TrekCard from '@/components/TrekCard';
 import TrekFilters from '@/components/TrekFilters';
 import { client, urlForImage } from '@/lib/sanity';
@@ -83,6 +84,60 @@ async function getTreks(countrySlug: string): Promise<Trek[]> {
 
 async function getCountry(slug: string): Promise<Country | null> {
   return client.fetch(countryQuery, { slug });
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, country } = await params;
+  const countryData = await getCountry(country);
+
+  const isSpanish = locale === 'es';
+  const countryName = countryData
+    ? (isSpanish ? countryData.name.es : countryData.name.en)
+    : country.toUpperCase();
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://trekkings-world.vercel.app';
+
+  const title = isSpanish
+    ? `Trekkings en ${countryName} - Lista Completa`
+    : `Treks in ${countryName} - Complete List`;
+
+  const description = isSpanish
+    ? `Todos los trekkings disponibles en ${countryName}. Filtr\u00e1 por dificultad, duraci\u00f3n y regi\u00f3n. Encontr\u00e1 tu pr\u00f3xima aventura.`
+    : `All available treks in ${countryName}. Filter by difficulty, duration and region. Find your next adventure.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/${country}/trekkings`,
+      languages: {
+        'es': `${siteUrl}/es/${country}/trekkings`,
+        'en': `${siteUrl}/en/${country}/trekkings`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${locale}/${country}/trekkings`,
+      siteName: 'Trekkings World',
+      locale: isSpanish ? 'es_AR' : 'en_US',
+      type: 'website',
+      images: [
+        {
+          url: `${siteUrl}/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: `Trekkings in ${countryName}`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${siteUrl}/og-image.jpg`],
+    },
+  };
 }
 
 export default async function TrekkingsPage({ params, searchParams }: Props) {

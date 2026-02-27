@@ -32,7 +32,7 @@ async function getCountries(): Promise<Country[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://trekkingsworld.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://trekkings-world.vercel.app';
   const locales = ['es', 'en'];
 
   const [treks, countries] = await Promise.all([getTreks(), getCountries()]);
@@ -41,6 +41,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '',
     '/privacy',
     '/terms',
+    '/tips',
+    '/apps',
   ];
 
   const entries: MetadataRoute.Sitemap = [];

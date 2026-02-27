@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Metadata } from 'next';
 import { Link } from '@/i18n/navigation';
 import TrekCard from '@/components/TrekCard';
 import { client, urlForImage } from '@/lib/sanity';
@@ -36,6 +37,55 @@ async function getFeaturedTreks(): Promise<FeaturedTrek[]> {
 
 async function getCountries(): Promise<Country[]> {
   return client.fetch(countriesQuery);
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isSpanish = locale === 'es';
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://trekkings-world.vercel.app';
+
+  const title = isSpanish
+    ? 'Trekkings World - Gu\u00edas de Trekking en Argentina, Chile y m\u00e1s'
+    : 'Trekkings World - Trekking Guides in Argentina, Chile and more';
+
+  const description = isSpanish
+    ? 'Descubr\u00ed las mejores rutas de trekking en Patagonia, Mendoza, Ushuaia y m\u00e1s. Gu\u00edas detalladas con mapas, consejos, clima y toda la info para tu pr\u00f3xima aventura.'
+    : 'Discover the best trekking routes in Patagonia, Mendoza, Ushuaia and more. Detailed guides with maps, tips, weather and all the info you need for your next adventure.';
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}`,
+      languages: {
+        'es': `${siteUrl}/es`,
+        'en': `${siteUrl}/en`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${locale}`,
+      siteName: 'Trekkings World',
+      locale: isSpanish ? 'es_AR' : 'en_US',
+      type: 'website',
+      images: [
+        {
+          url: `${siteUrl}/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: 'Trekkings World - Trekking Guides',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${siteUrl}/og-image.jpg`],
+    },
+  };
 }
 
 export default async function HomePage({ params }: Props) {

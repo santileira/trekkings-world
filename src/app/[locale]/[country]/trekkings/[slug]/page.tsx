@@ -1,5 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 import { PortableText } from '@portabletext/react';
 import TrekMap from '@/components/TrekMap';
 import ImageCarousel from '@/components/ImageCarousel';
@@ -8,6 +9,7 @@ import ExternalLinks from '@/components/ExternalLinks';
 import SocialLinks from '@/components/SocialLinks';
 import WeatherWidget from '@/components/WeatherWidget';
 import RelatedTreks from '@/components/RelatedTreks';
+import ShareButtons from '@/components/ShareButtons';
 import { client, urlForImage } from '@/lib/sanity';
 import { trekQuery, relatedTreksQuery } from '@/lib/queries';
 import { sortByProximity } from '@/lib/geo';
@@ -81,6 +83,84 @@ async function getRelatedTreks(countrySlug: string, currentSlug: string): Promis
   return client.fetch(relatedTreksQuery, { countrySlug, currentSlug });
 }
 
+function extractPlainText(portableTextBlocks: any[]): string {
+  if (!portableTextBlocks || portableTextBlocks.length === 0) return '';
+  return portableTextBlocks
+    .filter((block: any) => block._type === 'block' && block.children)
+    .map((block: any) => block.children.map((child: any) => child.text || '').join(''))
+    .join(' ')
+    .trim();
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, country, slug } = await params;
+  const trek = await getTrek(slug);
+
+  if (!trek || trek.country.slug !== country) {
+    return {};
+  }
+
+  const isSpanish = locale === 'es';
+  const title = isSpanish ? trek.title.es : trek.title.en;
+  const countryName = isSpanish ? trek.country.name.es : trek.country.name.en;
+  const regionName = isSpanish ? trek.region.name.es : trek.region.name.en;
+
+  // Build description from Portable Text content or generate a summary
+  const descriptionBlocks = isSpanish ? trek.description?.es : trek.description?.en;
+  const plainDescription = extractPlainText(descriptionBlocks);
+  const description = plainDescription
+    ? plainDescription.substring(0, 160) + (plainDescription.length > 160 ? '...' : '')
+    : isSpanish
+      ? `${title} - Trekking en ${regionName}, ${countryName}. Distancia: ${trek.distance} km, Desnivel: ${trek.elevation} m. Guia completa con mapa, consejos y mas.`
+      : `${title} - Trekking in ${regionName}, ${countryName}. Distance: ${trek.distance} km, Elevation: ${trek.elevation} m. Complete guide with map, tips and more.`;
+
+  // Build OG image URL from Sanity mainImage
+  const ogImageUrl = trek.mainImage
+    ? urlForImage(trek.mainImage).width(1200).height(630).url()
+    : undefined;
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://trekkings-world.vercel.app';
+  const canonicalUrl = `${siteUrl}/${locale}/${country}/trekkings/${slug}`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        'es': `${siteUrl}/es/${country}/trekkings/${slug}`,
+        'en': `${siteUrl}/en/${country}/trekkings/${slug}`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: 'Trekkings World',
+      locale: isSpanish ? 'es_AR' : 'en_US',
+      type: 'article',
+      ...(ogImageUrl && {
+        images: [
+          {
+            url: ogImageUrl,
+            width: 1200,
+            height: 630,
+            alt: title,
+          },
+        ],
+      }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(ogImageUrl && {
+        images: [ogImageUrl],
+      }),
+    },
+  };
+}
+
 export default async function TrekDetailPage({ params }: Props) {
   const { locale, country, slug } = await params;
   setRequestLocale(locale);
@@ -104,6 +184,9 @@ export default async function TrekDetailPage({ params }: Props) {
   const countryName = locale === 'es' ? trek.country.name.es : trek.country.name.en;
   const regionName = locale === 'es' ? trek.region.name.es : trek.region.name.en;
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://trekkings-world.vercel.app';
+  const trekUrl = `${baseUrl}/${locale}/${country}/trekkings/${slug}`;
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'easy':
@@ -121,13 +204,15 @@ export default async function TrekDetailPage({ params }: Props) {
 
   const getDifficultyLabel = (difficulty: string) => {
     const labels: Record<string, { es: string; en: string }> = {
-      easy: { es: 'Fácil', en: 'Easy' },
+      easy: { es: 'F\u00e1cil', en: 'Easy' },
       moderate: { es: 'Moderado', en: 'Moderate' },
-      hard: { es: 'Difícil', en: 'Hard' },
+      hard: { es: 'Dif\u00edcil', en: 'Hard' },
       expert: { es: 'Experto', en: 'Expert' },
     };
     return locale === 'es' ? labels[difficulty]?.es : labels[difficulty]?.en;
   };
+
+  const shareDescription = `${getDifficultyLabel(trek.difficulty)} | ${trek.distance} km | ${regionName}, ${countryName}`;
 
   const formatDuration = (duration: string) => {
     if (!duration) return '-';
@@ -143,8 +228,8 @@ export default async function TrekDetailPage({ params }: Props) {
     if (lower.includes('hora') || lower.includes('hour')) {
       const oneWay = Math.round(maxNum / 2);
       return locale === 'es' ? `${oneWay} horas (ida)` : `${oneWay} hours (one-way)`;
-    } else if (lower.includes('día') || lower.includes('day')) {
-      return locale === 'es' ? `${maxNum} días` : `${maxNum} days`;
+    } else if (lower.includes('d\u00eda') || lower.includes('day')) {
+      return locale === 'es' ? `${maxNum} d\u00edas` : `${maxNum} days`;
     }
 
     return duration;
@@ -184,8 +269,8 @@ export default async function TrekDetailPage({ params }: Props) {
     for (const block of tipsContent) {
       if (block._type === 'block' && block.children) {
         const text = block.children.map((child: any) => child.text || '').join('');
-        // Split by bullet points (•) or by lines starting with -
-        const lines = text.split(/[•\n]/).map((line: string) => line.trim()).filter((line: string) => line.length > 0);
+        // Split by bullet points or by lines starting with -
+        const lines = text.split(/[\u2022\n]/).map((line: string) => line.trim()).filter((line: string) => line.length > 0);
         tips.push(...lines);
       }
     }
@@ -201,8 +286,106 @@ export default async function TrekDetailPage({ params }: Props) {
   // Combine all images for the hero carousel
   const allImages = mainImageUrl ? [mainImageUrl, ...galleryUrls] : galleryUrls;
 
+  // JSON-LD structured data for SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'TouristAttraction',
+    name: title,
+    description: extractPlainText(locale === 'es' ? trek.description?.es : trek.description?.en),
+    url: trekUrl,
+    touristType: 'Hiking',
+    ...(trek.mainImage && {
+      image: urlForImage(trek.mainImage).width(1200).height(630).url(),
+    }),
+    ...(trek.coordinates && {
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: trek.coordinates.lat,
+        longitude: trek.coordinates.lng,
+      },
+    }),
+    isAccessibleForFree: true,
+    address: {
+      '@type': 'PostalAddress',
+      addressRegion: regionName,
+      addressCountry: countryName,
+    },
+    additionalProperty: [
+      {
+        '@type': 'PropertyValue',
+        name: 'Difficulty',
+        value: getDifficultyLabel(trek.difficulty),
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Distance',
+        value: `${trek.distance} km`,
+      },
+      {
+        '@type': 'PropertyValue',
+        name: 'Elevation Gain',
+        value: `${trek.elevation} m`,
+      },
+      ...(trek.duration
+        ? [{
+            '@type': 'PropertyValue' as const,
+            name: 'Duration',
+            value: trek.duration,
+          }]
+        : []),
+      ...(trek.bestSeason && trek.bestSeason.length > 0
+        ? [{
+            '@type': 'PropertyValue' as const,
+            name: 'Best Season',
+            value: getBestSeasonText(),
+          }]
+        : []),
+    ],
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: locale === 'es' ? 'Inicio' : 'Home',
+        item: `${baseUrl}/${locale}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: countryName,
+        item: `${baseUrl}/${locale}/${country}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Trekkings',
+        item: `${baseUrl}/${locale}/${country}/trekkings`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 4,
+        name: title,
+        item: trekUrl,
+      },
+    ],
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm overflow-x-auto">
         <ol className="flex items-center space-x-2 text-gray-500 whitespace-nowrap">
@@ -240,10 +423,20 @@ export default async function TrekDetailPage({ params }: Props) {
               </span>
             </div>
 
+            {/* Share Buttons */}
+            <div className="mb-4">
+              <ShareButtons
+                url={trekUrl}
+                title={title}
+                description={shareDescription}
+                locale={locale}
+              />
+            </div>
+
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-xl">
               <div>
-                <p className="text-sm text-gray-500">{locale === 'es' ? 'Duración' : 'Duration'}</p>
+                <p className="text-sm text-gray-500">{locale === 'es' ? 'Duraci\u00f3n' : 'Duration'}</p>
                 <p className="text-lg font-semibold text-gray-900">{formatDuration(trek.duration)}</p>
               </div>
               <div>
@@ -255,7 +448,7 @@ export default async function TrekDetailPage({ params }: Props) {
                 <p className="text-lg font-semibold text-gray-900">{trek.elevation} m</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">{locale === 'es' ? 'Mejor época' : 'Best Season'}</p>
+                <p className="text-sm text-gray-500">{locale === 'es' ? 'Mejor \u00e9poca' : 'Best Season'}</p>
                 <p className="text-lg font-semibold text-gray-900">
                   {getBestSeasonText()}
                 </p>
@@ -272,7 +465,7 @@ export default async function TrekDetailPage({ params }: Props) {
           {description && (
             <section className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                {locale === 'es' ? 'Descripción' : 'Description'}
+                {locale === 'es' ? 'Descripci\u00f3n' : 'Description'}
               </h2>
               <div className="prose prose-slate max-w-none">
                 <PortableText value={description} />
@@ -387,7 +580,7 @@ export default async function TrekDetailPage({ params }: Props) {
           {trek.externalLinks && trek.externalLinks.length > 0 && (
             <section className="mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                {locale === 'es' ? 'Más Recursos' : 'More Resources'}
+                {locale === 'es' ? 'M\u00e1s Recursos' : 'More Resources'}
               </h2>
               <ExternalLinks links={trek.externalLinks} locale={locale} />
             </section>
@@ -404,11 +597,11 @@ export default async function TrekDetailPage({ params }: Props) {
             {/* Quick Info Card - show first on mobile for better UX */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 order-first lg:order-none">
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
-                {locale === 'es' ? 'Información rápida' : 'Quick Info'}
+                {locale === 'es' ? 'Informaci\u00f3n r\u00e1pida' : 'Quick Info'}
               </h3>
               <dl className="space-y-2 sm:space-y-3 text-sm sm:text-base">
                 <div className="flex justify-between">
-                  <dt className="text-gray-500">{locale === 'es' ? 'Región' : 'Region'}</dt>
+                  <dt className="text-gray-500">{locale === 'es' ? 'Regi\u00f3n' : 'Region'}</dt>
                   <dd className="font-medium text-gray-900">{regionName}</dd>
                 </div>
                 <div className="flex justify-between">

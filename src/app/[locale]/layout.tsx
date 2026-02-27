@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       address: false,
       telephone: false,
     },
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://trekkingsworld.com'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://trekkings-world.vercel.app'),
     alternates: {
       canonical: '/',
       languages: {
