@@ -95,6 +95,28 @@ const CATEGORIES: Category[] = [
         },
       },
       {
+        icon: '📻',
+        title: { es: 'Radio VHF / Handy', en: 'VHF Radio / Walkie-talkie' },
+        description: {
+          es: 'En zonas de montaña no hay señal celular. Un handy VHF es la forma más confiable y económica de pedir ayuda en emergencias.',
+          en: 'There is no cell signal in mountain areas. A VHF handy radio is the most reliable and affordable way to call for help in emergencies.',
+        },
+        items: {
+          es: [
+            'Frecuencia de emergencia en montaña (FEM): 140.970 MHz (uso libre, Res. ENACOM 5/2015)',
+            'Canal general entre grupos: 139.970 MHz / Secundario: 138.510 MHz',
+            'Baofeng UV-5R: económico, liviano y suficiente para trekking (alcance 5-20 km según terreno)',
+            'Sin cobertura celular de ningún operador, el 911 NO funciona. El handy es tu único medio de comunicación',
+          ],
+          en: [
+            'Mountain emergency frequency (FEM): 140.970 MHz (license-free, ENACOM Res. 5/2015)',
+            'General channel between groups: 139.970 MHz / Secondary: 138.510 MHz',
+            'Baofeng UV-5R: affordable, lightweight and sufficient for trekking (5-20 km range depending on terrain)',
+            'Without cell coverage from any carrier, 911 does NOT work. The radio is your only means of communication',
+          ],
+        },
+      },
+      {
         icon: '🌡️',
         title: { es: 'Clima y condiciones', en: 'Weather and conditions' },
         description: {
