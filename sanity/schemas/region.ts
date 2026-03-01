@@ -48,6 +48,16 @@ export default defineType({
         hotspot: true,
       },
     }),
+    defineField({
+      name: 'safetyInfo',
+      title: 'Safety Information',
+      description: 'Region-specific safety info: emergency frequencies, contacts, local tips',
+      type: 'object',
+      fields: [
+        { name: 'es', title: 'Spanish', type: 'array', of: [{ type: 'block' }] },
+        { name: 'en', title: 'English', type: 'array', of: [{ type: 'block' }] },
+      ],
+    }),
   ],
   preview: {
     select: {

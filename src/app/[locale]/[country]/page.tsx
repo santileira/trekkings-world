@@ -2,19 +2,22 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next';
 import { Link } from '@/i18n/navigation';
 import { notFound } from 'next/navigation';
+import { client } from '@/lib/sanity';
+import { countryQuery, regionsQuery } from '@/lib/queries';
 
-const countryData: Record<string, { name: { es: string; en: string }; flag: string; regions: { slug: string; name: { es: string; en: string }; trekCount: number }[] }> = {
-  ar: {
-    name: { es: 'Argentina', en: 'Argentina' },
-    flag: '🇦🇷',
-    regions: [
-      { slug: 'patagonia', name: { es: 'Patagonia', en: 'Patagonia' }, trekCount: 12 },
-      { slug: 'cuyo', name: { es: 'Cuyo', en: 'Cuyo' }, trekCount: 5 },
-      { slug: 'noa', name: { es: 'Noroeste Argentino', en: 'Northwest Argentina' }, trekCount: 4 },
-      { slug: 'litoral', name: { es: 'Litoral', en: 'Litoral' }, trekCount: 2 },
-      { slug: 'centro', name: { es: 'Centro', en: 'Central' }, trekCount: 2 },
-    ],
-  },
+type CountryData = {
+  _id: string;
+  name: { es: string; en: string };
+  code: string;
+  slug: string;
+  flag: string;
+};
+
+type Region = {
+  _id: string;
+  name: { es: string; en: string };
+  slug: string;
+  trekCount: number;
 };
 
 type Props = {
@@ -23,7 +26,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, country } = await params;
-  const data = countryData[country];
+  const data: CountryData | null = await client.fetch(countryQuery, { slug: country });
 
   if (!data) {
     return {};
@@ -80,7 +83,11 @@ export default async function CountryPage({ params }: Props) {
   const { locale, country } = await params;
   setRequestLocale(locale);
 
-  const data = countryData[country];
+  const [data, regions] = await Promise.all([
+    client.fetch<CountryData | null>(countryQuery, { slug: country }),
+    client.fetch<Region[]>(regionsQuery, { countrySlug: country }),
+  ]);
+
   if (!data) {
     notFound();
   }
@@ -112,10 +119,10 @@ export default async function CountryPage({ params }: Props) {
           {locale === 'es' ? 'Regiones' : 'Regions'}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.regions.map((region) => (
+          {regions.map((region) => (
             <Link
               key={region.slug}
-              href={`/${country}/trekkings?region=${region.slug}`}
+              href={`/${country}/${region.slug}`}
               className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
             >
               <h3 className="text-xl font-semibold text-gray-900 group-hover:text-slate-700 transition-colors">

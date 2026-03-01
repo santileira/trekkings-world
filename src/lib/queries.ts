@@ -139,6 +139,40 @@ export const countriesWithRegionsQuery = groq`
   }
 `;
 
+// Get a single region by slug
+export const regionQuery = groq`
+  *[_type == "region" && slug.current == $regionSlug && country->slug.current == $countrySlug][0] {
+    _id,
+    name,
+    "slug": slug.current,
+    description,
+    image,
+    safetyInfo,
+    "country": country->{
+      name,
+      code,
+      "slug": slug.current
+    },
+    "trekCount": count(*[_type == "trek" && references(^._id)])
+  }
+`;
+
+// Get treks for a region page
+export const treksForRegionQuery = groq`
+  *[_type == "trek" && region->slug.current == $regionSlug] | order(difficulty asc) {
+    _id,
+    title,
+    "slug": slug.current,
+    "country": country->slug.current,
+    "region": region->slug.current,
+    difficulty,
+    duration,
+    distance,
+    hasRefugio,
+    mainImage
+  }
+`;
+
 // Search treks - fetch all for client-side accent-insensitive filtering
 export const searchTreksQuery = groq`
   *[_type == "trek"] | order(publishedAt desc) {

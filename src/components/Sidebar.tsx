@@ -141,7 +141,7 @@ export default function Sidebar({ locale, className = '', onLinkClick }: Sidebar
                   {country.regions.map((region) => (
                     <Link
                       key={region.slug}
-                      href={`/${country.code}/trekkings?region=${region.slug}`}
+                      href={`/${country.code}/${region.slug}`}
                       onClick={onLinkClick}
                       className={`block px-3 py-1.5 text-sm rounded-md transition-colors ${
                         pathname.includes(region.slug)
