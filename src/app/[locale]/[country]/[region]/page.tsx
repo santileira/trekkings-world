@@ -1,8 +1,8 @@
 import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { PortableText } from '@portabletext/react';
 import TrekCard from '@/components/TrekCard';
+import CollapsibleSafety from '@/components/CollapsibleSafety';
 import { client, urlForImage } from '@/lib/sanity';
 import { regionQuery, treksForRegionQuery } from '@/lib/queries';
 
@@ -143,9 +143,11 @@ export default async function RegionPage({ params }: Props) {
             {isSpanish ? 'Seguridad en la Zona' : 'Area Safety'}
           </h2>
           <div className="bg-blue-50 rounded-xl border border-blue-200 p-6">
-            <div className="prose prose-slate max-w-none prose-li:marker:text-blue-500 prose-li:my-1">
-              <PortableText value={safetyInfo} />
-            </div>
+            <CollapsibleSafety
+              value={safetyInfo}
+              expandLabel={isSpanish ? 'Ver toda la información' : 'Show all information'}
+              collapseLabel={isSpanish ? 'Ver menos' : 'Show less'}
+            />
           </div>
         </section>
       )}
