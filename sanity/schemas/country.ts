@@ -54,6 +54,26 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'safetyInfo',
+      title: 'Safety Information',
+      description: 'Country-wide safety info: emergency numbers, national rescue organizations, common frequencies',
+      type: 'object',
+      fields: [
+        {
+          name: 'es',
+          title: 'Spanish',
+          type: 'array',
+          of: [{ type: 'block' }],
+        },
+        {
+          name: 'en',
+          title: 'English',
+          type: 'array',
+          of: [{ type: 'block' }],
+        },
+      ],
+    }),
+    defineField({
       name: 'enabled',
       title: 'Enabled',
       type: 'boolean',

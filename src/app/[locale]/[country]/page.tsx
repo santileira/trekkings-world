@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Metadata } from 'next';
 import { Link } from '@/i18n/navigation';
 import { notFound } from 'next/navigation';
+import CollapsibleSafety from '@/components/CollapsibleSafety';
 import { client } from '@/lib/sanity';
 import { countryQuery, regionsQuery } from '@/lib/queries';
 
@@ -11,6 +12,7 @@ type CountryData = {
   code: string;
   slug: string;
   flag: string;
+  safetyInfo?: { es: any[]; en: any[] };
 };
 
 type Region = {
@@ -93,6 +95,8 @@ export default async function CountryPage({ params }: Props) {
   }
 
   const t = await getTranslations('country');
+  const isSpanish = locale === 'es';
+  const safetyInfo = isSpanish ? data.safetyInfo?.es : data.safetyInfo?.en;
 
   return (
     <div>
@@ -103,7 +107,7 @@ export default async function CountryPage({ params }: Props) {
             <span className="text-6xl">{data.flag}</span>
             <div>
               <h1 className="text-4xl md:text-5xl font-bold text-slate-800">
-                {t('trekkingsIn', { country: locale === 'es' ? data.name.es : data.name.en })}
+                {t('trekkingsIn', { country: isSpanish ? data.name.es : data.name.en })}
               </h1>
               <p className="mt-2 text-slate-600 text-lg">
                 {t('exploreRegions')}
@@ -112,6 +116,23 @@ export default async function CountryPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {/* Country Safety Info */}
+      {safetyInfo && safetyInfo.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span className="text-2xl">🛡️</span>
+            {isSpanish ? 'Seguridad y Emergencias' : 'Safety and Emergencies'}
+          </h2>
+          <div className="bg-blue-50 rounded-xl border border-blue-200 p-6">
+            <CollapsibleSafety
+              value={safetyInfo}
+              expandLabel={isSpanish ? 'Ver toda la información' : 'Show all information'}
+              collapseLabel={isSpanish ? 'Ver menos' : 'Show less'}
+            />
+          </div>
+        </section>
+      )}
 
       {/* Regions */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -126,13 +147,13 @@ export default async function CountryPage({ params }: Props) {
               className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-100"
             >
               <h3 className="text-xl font-semibold text-gray-900 group-hover:text-slate-700 transition-colors">
-                {locale === 'es' ? region.name.es : region.name.en}
+                {isSpanish ? region.name.es : region.name.en}
               </h3>
               <p className="mt-2 text-gray-500">
                 {region.trekCount} trekkings
               </p>
               <div className="mt-4 flex items-center text-slate-600 font-medium">
-                <span>{locale === 'es' ? 'Ver trekkings' : 'View treks'}</span>
+                <span>{isSpanish ? 'Ver trekkings' : 'View treks'}</span>
                 <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -147,7 +168,7 @@ export default async function CountryPage({ params }: Props) {
             href={`/${country}/trekkings`}
             className="inline-flex items-center px-8 py-4 bg-slate-700 text-white font-semibold rounded-lg hover:bg-slate-800 transition-colors"
           >
-            {locale === 'es' ? 'Ver todos los trekkings' : 'View all treks'}
+            {isSpanish ? 'Ver todos los trekkings' : 'View all treks'}
             <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>

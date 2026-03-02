@@ -24,7 +24,8 @@ export const countryQuery = groq`
     "slug": slug.current,
     description,
     flag,
-    image
+    image,
+    safetyInfo
   }
 `;
 
