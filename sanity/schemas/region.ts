@@ -58,6 +58,16 @@ export default defineType({
         { name: 'en', title: 'English', type: 'array', of: [{ type: 'block' }] },
       ],
     }),
+    defineField({
+      name: 'transportInfo',
+      title: 'Transport Information',
+      description: 'How to reach trailheads: buses, car access, airports, transfers',
+      type: 'object',
+      fields: [
+        { name: 'es', title: 'Spanish', type: 'array', of: [{ type: 'block' }] },
+        { name: 'en', title: 'English', type: 'array', of: [{ type: 'block' }] },
+      ],
+    }),
   ],
   preview: {
     select: {

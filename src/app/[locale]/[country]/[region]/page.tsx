@@ -13,6 +13,7 @@ type Region = {
   description?: { es: string; en: string };
   image?: any;
   safetyInfo?: { es: any[]; en: any[] };
+  transportInfo?: { es: any[]; en: any[] };
   country: {
     name: { es: string; en: string };
     code: string;
@@ -112,6 +113,7 @@ export default async function RegionPage({ params }: Props) {
   const countryName = isSpanish ? region.country.name.es : region.country.name.en;
   const description = isSpanish ? region.description?.es : region.description?.en;
   const safetyInfo = isSpanish ? region.safetyInfo?.es : region.safetyInfo?.en;
+  const transportInfo = isSpanish ? region.transportInfo?.es : region.transportInfo?.en;
 
   const transformedTreks = treks.map((trek) => ({
     slug: trek.slug,
@@ -145,6 +147,23 @@ export default async function RegionPage({ params }: Props) {
           <div className="bg-blue-50 rounded-xl border border-blue-200 p-6">
             <CollapsibleSafety
               value={safetyInfo}
+              expandLabel={isSpanish ? 'Ver toda la información' : 'Show all information'}
+              collapseLabel={isSpanish ? 'Ver menos' : 'Show less'}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Transport Info */}
+      {transportInfo && transportInfo.length > 0 && (
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span className="text-2xl">🚌</span>
+            {isSpanish ? 'Cómo Llegar' : 'Getting There'}
+          </h2>
+          <div className="bg-green-50 rounded-xl border border-green-200 p-6">
+            <CollapsibleSafety
+              value={transportInfo}
               expandLabel={isSpanish ? 'Ver toda la información' : 'Show all information'}
               collapseLabel={isSpanish ? 'Ver menos' : 'Show less'}
             />

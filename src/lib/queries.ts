@@ -149,6 +149,7 @@ export const regionQuery = groq`
     description,
     image,
     safetyInfo,
+    transportInfo,
     "country": country->{
       name,
       code,
